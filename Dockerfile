@@ -1,6 +1,11 @@
 FROM node
 RUN npm install express
+RUN npm install request
+RUN npm install cheerio
+RUN npm install -g coffee-script
+RUN npm install -g nodemon
 RUN mkdir /fetcher
 COPY services /fetcher/
-COPY fetcher.js /fetcher/
-CMD ["node", "/fetcher/fetcher.js"]
+COPY main.coffee /fetcher/
+WORKDIR /fetcher
+CMD ["nodemon", "main.coffee"]
