@@ -18,6 +18,11 @@ class WordpressWordscount extends Fetcher
     # fetch sitemap.xml and return sub-sitemaps
     @parse_sitemaps site, (sitemaps) =>
 
+      # return -1 if sitemap is not found at url
+      if sitemaps.length == 0
+        @return_value "-1"
+        return
+
       # fetch sitemap and return posts
       @parse_posts sitemaps, (posts) =>
         posts_parsing = 0
