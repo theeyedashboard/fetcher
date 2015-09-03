@@ -12,13 +12,10 @@ class WordpressWordscount extends Fetcher
     site = @params['site']
     @wordscount = 0
 
-    # @parse_wordscount "http://zestprod.com/2015/08/19/stop-building-apps-that-users-wont-give-a-shit-about/", (wordscount) =>
-    #   console.log wordscount
-
     # fetch sitemap.xml and return sub-sitemaps
     @parse_sitemaps site, (sitemaps) =>
 
-      # return -1 if sitemap is not found at url
+      # return -1 if sitemap is not found at urldif
       if sitemaps.length == 0
         @return_value "-1"
         return
