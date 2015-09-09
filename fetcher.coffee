@@ -51,9 +51,18 @@ class Fetcher
 
         @plugins.push fetcher
 
+  @print_plugins: =>
+    output = ''
+    for plugin in @plugins
+      url   = "#{plugin.service}/#{plugin.source}"
+      output +=  "#{url} <br />"
+    return output
+
   @start: (port) =>
     server = app.listen port, =>
       console.log "Fetcher running on port #{port}"
+    app.get '/', (req, res) =>
+      res.send @print_plugins()
 
 
 module.exports = Fetcher
