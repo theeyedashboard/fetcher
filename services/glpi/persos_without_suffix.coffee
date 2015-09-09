@@ -7,7 +7,7 @@ request = require('request')
 class PersosWithoutSuffix extends Fetcher
 
   fetch: =>
-    base_url = "https://glpi.loria.fr/plugins/csvexport/webservice.php?action=perso_without_suffix&format=csv"
+    base_url = @params['base_url']
     request base_url, (error, response, body) =>
       results_count = body.split(/\r\n|\r|\n/).length - 1
       @return_value "#{results_count}"
