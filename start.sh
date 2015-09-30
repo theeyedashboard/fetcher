@@ -11,4 +11,4 @@ echo "++ ${NEW_LINE}"
 sed -i "s/${OLD_LINE}/${NEW_LINE}/g" $PARSE_FILE
 
 # start fetcher
-nodemon main.coffee
+nodemon main.coffee localhost 80
