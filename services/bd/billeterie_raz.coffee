@@ -20,14 +20,16 @@ class BDBilleterieRAZ extends Fetcher
         try
           results['raz']            = @parse_raz_number(records)
           results['vestiaire']      = @parse_vestiaire(records)
-          results['date_start']     = @parse_raz_dates(records)['start']
-          results['date_end']       = @parse_raz_dates(records)['end']
+          dates = @parse_raz_dates(records)
+          results['date_start']     = dates['start']
+          results['date_end']       = dates['end']
           results['revenues']       = @parse_encaissements(records)
-          results['taxe1']          = { val: '20', ht: 0, tva: 0, ttc: 0}
-          results['taxe2']          = { val: '10', ht: 0, tva: 0, ttc: 0}
-          results['total']          = { ht: 0, tva: 0, ttc: 0}
-          results['annulations']    = { amount: 0, total: 0 }
-          results['offerts']        = { amount: 0, total: 0 }
+          taxes = @parse_taxes(records)
+          results['taxe1']          = taxes['taxe1']
+          results['taxe2']          = taxes['taxe2']
+          results['total']          = taxes['total']
+          results['annulations']    = @parse_annulations(records)
+          results['offerts']        = @parse_offerts(records)
           results['articles']       = @parse_articles(records)
           @return_value { status: 0, data: results }
         catch error
@@ -106,8 +108,46 @@ class BDBilleterieRAZ extends Fetcher
   parse_encaissements: (records) =>
     for record in records
       if record[1] && record[1].indexOf("ENCAISSEMENT") > -1
-        number = record[6].replace( /^\D+/g, '')
+        number = record[6].replace(',','.').replace( /^\D+/g, '')
         return parseFloat(number)
     throw "Encaissements not found"
+
+  parse_taxes: (records) =>
+    index = 0
+    taxes = {}
+    for record in records
+      if record[1] && record[1].indexOf("TVA") > -1
+        value = parseFloat(record[1].replace(',','.').replace( /^\D+/g, ''))
+        ht    = parseFloat(record[4].replace(',','.').replace( /^\D+/g, ''))
+        tva   = parseFloat(record[5].replace(',','.').replace( /^\D+/g, ''))
+        ttc   = parseFloat(record[6].replace(',','.').replace( /^\D+/g, ''))
+        if index == 0
+          taxes['taxe1'] = { val: value, ht: ht, tva: tva, ttc: ttc }
+        if index == 1
+          taxes['taxe2'] = { val: value, ht: ht, tva: tva, ttc: ttc }
+          tot_val = taxes['taxe1']['val'] + taxes['taxe2']['val']
+          tot_ht  = taxes['taxe1']['ht']  + taxes['taxe2']['ht']
+          tot_tva = taxes['taxe1']['tva'] + taxes['taxe2']['tva']
+          tot_ttc = taxes['taxe1']['ttc'] + taxes['taxe2']['ttc']
+          taxes['total'] = { ht: tot_ht, tva: tot_tva, ttc: tot_ttc }
+          return taxes
+        index++
+    throw "Problem parsing taxes"
+
+  parse_annulations: (records) =>
+    for record in records
+      if record[1] && record[1].indexOf("ANNULATION") > -1
+        amount = parseInt(record[4])
+        value  = parseFloat(record[6].replace(',','.').replace( /^\D+/g, ''))
+        return { amount: amount, value: value }
+    throw "Annulations not found"
+
+  parse_offerts: (records) =>
+    for record in records
+      if record[1] && record[1].indexOf("OFFERT") > -1
+        amount = parseInt(record[4])
+        value  = parseFloat(record[6].replace(',','.').replace( /^\D+/g, ''))
+        return { amount: amount, value: value }
+    throw "Offerts not found"
 
 module.exports = BDBilleterieRAZ

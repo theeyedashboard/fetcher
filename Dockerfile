@@ -7,6 +7,7 @@ RUN npm install request
 RUN npm install cheerio
 RUN npm install xml2js
 RUN npm install excel-parser
+RUN npm install url
 RUN npm install moment --save
 RUN npm install -g coffee-script
 RUN npm install -g nodemon
