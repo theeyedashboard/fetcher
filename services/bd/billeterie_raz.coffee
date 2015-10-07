@@ -1,16 +1,22 @@
 Fetcher = require('../../fetcher')
 request = require('request')
+fs      = require ('fs')
 excelParser = require('excel-parser')
 moment = require('moment')
 
 class BDBilleterieRAZ extends Fetcher
 
   file: =>
-    'tmp/bd/2015-sep.xls'
+    'tmp/bd/Export_2015_septembre_BarDistribution.xls'
+
+  files_path: =>
+    'tmp/bd'
 
   fetch: =>
     if !@params['action']
       @return_value 'Missing action parameter'
+    else if @params['action'] == 'files'
+      @return_value @fetch_files()
     else if @params['action'] == 'worksheets'
       @worksheets (worksheets) =>
         @return_value worksheets
@@ -36,6 +42,13 @@ class BDBilleterieRAZ extends Fetcher
           @return_value { status: -1, error: error }
 
         # console.log records
+
+  fetch_files: =>
+    _files = []
+    # list all services directories
+    for file in fs.readdirSync @files_path()
+      _files.push file
+    return _files
 
   worksheets: (callback) =>
     excelParser.worksheets(
