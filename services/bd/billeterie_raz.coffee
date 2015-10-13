@@ -7,7 +7,7 @@ moment = require('moment')
 class BDBilleterieRAZ extends Fetcher
 
   file: =>
-    'tmp/bd/Export_2015_septembre_BarDistribution.xls'
+    @files_path() + '/' + @params['file']
 
   files_path: =>
     'tmp/bd'
@@ -51,6 +51,7 @@ class BDBilleterieRAZ extends Fetcher
     return _files
 
   worksheets: (callback) =>
+    console.log @file()
     excelParser.worksheets(
       inFile: @file()
     , (err, worksheets) =>
