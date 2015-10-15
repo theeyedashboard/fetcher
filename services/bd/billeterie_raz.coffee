@@ -104,7 +104,11 @@ class BDBilleterieRAZ extends Fetcher
         # replace all leading non-digits with nothing
         number = record[5].replace( /^\D+/g, '')
         return parseInt(number)
-    throw "Vestiaire not found"
+      else if record[5] && record[5].indexOf("Billetterie") > -1
+        # replace all leading non-digits with nothing
+        number = record[5].replace( /^\D+/g, '')
+        return parseInt(number)
+    throw "Vestiaire/Billetterie not found"
 
   parse_raz_dates: (records) =>
     index = 0
@@ -154,7 +158,8 @@ class BDBilleterieRAZ extends Fetcher
         amount = parseInt(record[4])
         value  = parseFloat(record[6].replace(',','.').replace( /^\D+/g, ''))
         return { amount: amount, value: value }
-    throw "Annulations not found"
+    # throw "Annulations not found"
+    return { amount: 0, value: 0 }
 
   parse_offerts: (records) =>
     for record in records
@@ -162,6 +167,7 @@ class BDBilleterieRAZ extends Fetcher
         amount = parseInt(record[4])
         value  = parseFloat(record[6].replace(',','.').replace( /^\D+/g, ''))
         return { amount: amount, value: value }
-    throw "Offerts not found"
+    # throw "Offerts not found"
+    return { amount: 0, value: 0 }
 
 module.exports = BDBilleterieRAZ
