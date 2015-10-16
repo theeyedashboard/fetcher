@@ -12,8 +12,9 @@ RUN npm install url
 RUN npm install -g coffee-script
 RUN npm install -g nodemon
 RUN mkdir /fetcher
-COPY services /fetcher/
+COPY services /fetcher/services
 COPY main.coffee /fetcher/
+COPY fetcher.coffee /fetcher/
 COPY start.sh /fetcher/
 WORKDIR /fetcher
-CMD ["/fetcher/start.sh"]
+CMD /fetcher/start.sh
