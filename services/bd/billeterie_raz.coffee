@@ -115,9 +115,9 @@ class BDBilleterieRAZ extends Fetcher
     for record in records
       if record[4] && record[4] != '' && record[6] && record[6] != ''
         if index == 0
-          date_start = moment(record[4] + ' ' + record[6], 'DD/MM/YYYY HH:mm:ss')
+          date_start = moment(record[4] + ' ' + record[6], 'DD/MMM/YYYY HH:mm:ss')
         if index == 1
-          date_end = moment(record[4] + ' ' + record[6], 'DD/MM/YYYY HH:mm:ss')
+          date_end = moment(record[4] + ' ' + record[6], 'DD/MMM/YYYY HH:mm:ss')
         if index >= 2
           return { start: date_start, end: date_end }
         index++
