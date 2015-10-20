@@ -10,7 +10,7 @@ class BDBilleterieRAZ extends Fetcher
     @files_path() + '/' + @params['file']
 
   files_path: =>
-    'tmp/bd'
+    '/dropbox/billetterie-test'
 
   fetch: =>
     if !@params['action']
@@ -47,7 +47,7 @@ class BDBilleterieRAZ extends Fetcher
     _files = []
     # list all services directories
     for file in fs.readdirSync @files_path()
-      _files.push file
+      _files.push file if file.indexOf(".xls") > -1
     return _files
 
   worksheets: (callback) =>
