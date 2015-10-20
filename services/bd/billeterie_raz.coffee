@@ -37,9 +37,12 @@ class BDBilleterieRAZ extends Fetcher
           results['annulations']    = @parse_annulations(records)
           results['offerts']        = @parse_offerts(records)
           results['articles']       = @parse_articles(records)
-          @return_value { status: 0, data: results }
+          results['status']         = 0
+          @return_value { results }
         catch error
-          @return_value { status: -1, error: error }
+          results['status']         = -1
+          results['error']          = error
+          @return_value { results }
 
         # console.log records
 
