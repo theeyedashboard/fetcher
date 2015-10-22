@@ -10,7 +10,7 @@ class BDBilleterieRAZ extends Fetcher
     @files_path() + '/' + @params['file']
 
   files_path: =>
-    '/dropbox/billetterie-test'
+    '/dropbox/BarDistribution'
 
   fetch: =>
     if !@params['action']
