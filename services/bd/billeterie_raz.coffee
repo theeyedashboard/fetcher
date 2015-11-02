@@ -134,7 +134,7 @@ class BDBilleterieRAZ extends Fetcher
     index = 0
     taxes = {}
     for record in records
-      if record[1] && record[1].indexOf("TVA") > -1
+      if record[1] && (record[1].indexOf("TVA") > -1 || record[1].indexOf("TOTAL") > -1)
         value = parseFloat(record[1].replace(',','.').replace( /^\D+/g, ''))
         ht    = parseFloat(record[4].replace(',','.').replace( /^\D+/g, ''))
         tva   = parseFloat(record[5].replace(',','.').replace( /^\D+/g, ''))
@@ -143,11 +143,13 @@ class BDBilleterieRAZ extends Fetcher
           taxes['taxe1'] = { val: value, ht: ht, tva: tva, ttc: ttc }
         if index == 1
           taxes['taxe2'] = { val: value, ht: ht, tva: tva, ttc: ttc }
-          tot_val = taxes['taxe1']['val'] + taxes['taxe2']['val']
-          tot_ht  = taxes['taxe1']['ht']  + taxes['taxe2']['ht']
-          tot_tva = taxes['taxe1']['tva'] + taxes['taxe2']['tva']
-          tot_ttc = taxes['taxe1']['ttc'] + taxes['taxe2']['ttc']
-          taxes['total'] = { ht: tot_ht, tva: tot_tva, ttc: tot_ttc }
+        if index == 2
+          taxes['total'] = { val: value, ht: ht, tva: tva, ttc: ttc }
+          # tot_val = taxes['taxe1']['val'] + taxes['taxe2']['val']
+          # tot_ht  = taxes['taxe1']['ht']  + taxes['taxe2']['ht']
+          # tot_tva = taxes['taxe1']['tva'] + taxes['taxe2']['tva']
+          # tot_ttc = taxes['taxe1']['ttc'] + taxes['taxe2']['ttc']
+          # taxes['total'] = { ht: tot_ht, tva: tot_tva, ttc: tot_ttc }
           return taxes
         index++
     throw "Problem parsing taxes"
