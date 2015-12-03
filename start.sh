@@ -1,6 +1,8 @@
 #!/bin/bash
 # Patch excelParser to avoid error with WARNING messages
 
+npm install url
+
 PARSE_FILE="/node_modules/excel-parser/excelParser.js"
 echo "-----------> Patching ${PARSE_FILE}..."
 WARNING_MSG="WARNING *** OLE2 inconsistency: SSCS size is 0 but SSAT size is non-zero"
