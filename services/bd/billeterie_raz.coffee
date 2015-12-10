@@ -29,6 +29,7 @@ class BDBilleterieRAZ extends Fetcher
           dates = @parse_raz_dates(records)
           results['date_start']     = dates['start']
           results['date_end']       = dates['end']
+          results['sales_amount']   = @parse_sales_amount(records)
           results['revenues']       = @parse_encaissements(records)
           taxes = @parse_taxes(records)
           results['taxe1']          = taxes['taxe1']
@@ -129,6 +130,13 @@ class BDBilleterieRAZ extends Fetcher
         number = record[6].replace(',','.').replace( /^\D+/g, '')
         return parseFloat(number)
     throw "Encaissements not found"
+
+  parse_sales_amount: (records) =>
+    for record in records
+      if record[1] && record[1].indexOf("VENTES") > -1
+        number = record[4].replace(',','.').replace( /^\D+/g, '')
+        return parseInt(number)
+    throw "Sales amount not found"
 
   parse_taxes: (records) =>
     index = 0
