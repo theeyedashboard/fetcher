@@ -10,11 +10,16 @@ class BDBilleterieRAZ extends Fetcher
     @files_path() + '/' + @params['file']
 
   files_path: =>
-    '/dropbox/BarDistribution'
+    '/dropbox/' + @params['folder']
+
+  folders_path: =>
+    '/dropbox'
 
   fetch: =>
     if !@params['action']
       @return_value 'Missing action parameter'
+    else if @params['action'] == 'folders'
+      @return_value @fetch_folders()
     else if @params['action'] == 'files'
       @return_value @fetch_files()
     else if @params['action'] == 'worksheets'
@@ -24,6 +29,7 @@ class BDBilleterieRAZ extends Fetcher
       @parse_worksheet @params['worksheet'], (records) =>
         results = {}
         try
+          results['folder']         = @params['folder']
           results['raz']            = @parse_raz_number(records)
           results['vestiaire']      = @parse_vestiaire(records)
           dates = @parse_raz_dates(records)
@@ -50,6 +56,14 @@ class BDBilleterieRAZ extends Fetcher
     for file in fs.readdirSync @files_path()
       _files.push file if file.indexOf(".xls") > -1
     return _files
+
+  fetch_folders: =>
+    _folders = []
+    # list all services directories
+    for folder in fs.readdirSync @folders_path()
+      if folder.charAt(0) != '.' && folder != 'test'
+        _folders.push folder
+    return _folders
 
   worksheets: (callback) =>
     console.log @file()
