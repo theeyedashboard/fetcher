@@ -53,16 +53,18 @@ class BDBilleterieRAZ extends Fetcher
   fetch_files: =>
     _files = []
     # list all services directories
-    for file in fs.readdirSync @files_path()
-      _files.push file if file.indexOf(".xls") > -1
+    if fs.readdirSync @files_path()
+      for file in fs.readdirSync @files_path()
+        _files.push file if file.indexOf(".xls") > -1
     return _files
 
   fetch_folders: =>
     _folders = []
     # list all services directories
-    for folder in fs.readdirSync @folders_path()
-      if folder.charAt(0) != '.' && folder != 'test'
-        _folders.push folder
+    if fs.readdirSync @folders_path()
+      for folder in fs.readdirSync @folders_path()
+        if folder.charAt(0) != '.' && folder != 'test'
+          _folders.push folder
     return _folders
 
   worksheets: (callback) =>
