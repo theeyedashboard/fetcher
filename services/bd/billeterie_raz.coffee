@@ -86,6 +86,7 @@ class BDBilleterieRAZ extends Fetcher
     , (err, records) =>
       if err
         console.error 'error:', err
+        console.error 'worksheet:', worksheet
       else
         callback(records)
     )
