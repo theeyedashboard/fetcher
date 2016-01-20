@@ -1,7 +1,7 @@
 #!/bin/bash
 # Patch excelParser to avoid error with WARNING messages
 
-npm install url
+# npm install url
 
 PARSE_FILE="/node_modules/excel-parser/excelParser.js"
 echo "-----------> Patching ${PARSE_FILE}..."
