@@ -33,6 +33,7 @@ class BDBilleterieRAZ extends Fetcher
           results['raz']            = @parse_raz_number(records)
           results['vestiaire']      = @parse_vestiaire(records)
           dates = @parse_raz_dates(records)
+          results['date_short']     = dates['short']
           results['date_start']     = dates['start']
           results['date_end']       = dates['end']
           results['sales_amount']   = @parse_sales_amount(records)
@@ -134,10 +135,11 @@ class BDBilleterieRAZ extends Fetcher
       if record[4] && record[4] != '' && record[6] && record[6] != ''
         if index == 0
           date_start = moment(record[4] + ' ' + record[6], 'DD/MMM/YYYY HH:mm:ss')
+          date_short = date_start.format('YYYYMM')
         if index == 1
           date_end = moment(record[4] + ' ' + record[6], 'DD/MMM/YYYY HH:mm:ss')
         if index >= 2
-          return { start: date_start, end: date_end }
+          return { start: date_start, end: date_end, short: date_short}
         index++
     throw "RAZ dates not found"
 
