@@ -28,26 +28,26 @@ class BDBilleterieRAZ extends Fetcher
         else if @params['action'] == 'parse'
             @parse_worksheet @params['worksheet'], (records) =>
                 results = {}
-                # try
-                results['folder']         = @params['folder']
-                results['raz']            = @parse_raz_number(records)
-                results['vestiaire']      = @parse_vestiaire(records)
-                dates = @parse_raz_dates(records)
-                results['date_short']     = dates['short']
-                results['date_start']     = dates['start']
-                results['date_end']       = dates['end']
-                results['sales_amount']   = @parse_sales_amount(records)
-                results['revenues']       = @parse_encaissements(records)
-                taxes = @parse_taxes(records)
-                results['taxe1']          = taxes['taxe1']
-                results['taxe2']          = taxes['taxe2']
-                results['total']          = taxes['total']
-                results['annulations']    = @parse_annulations(records)
-                results['offerts']        = @parse_offerts(records)
-                results['articles']       = @parse_articles(records)
-                @return_value { status: 0, data: results }
-                # catch error
-                #     @return_value { status: -1, error: error }
+                try
+                    results['folder']         = @params['folder']
+                    results['raz']            = @parse_raz_number(records)
+                    results['vestiaire']      = @parse_vestiaire(records)
+                    dates = @parse_raz_dates(records)
+                    results['date_short']     = dates['short']
+                    results['date_start']     = dates['start']
+                    results['date_end']       = dates['end']
+                    results['sales_amount']   = @parse_sales_amount(records)
+                    results['revenues']       = @parse_encaissements(records)
+                    taxes = @parse_taxes(records)
+                    results['taxe1']          = taxes['taxe1']
+                    results['taxe2']          = taxes['taxe2']
+                    results['total']          = taxes['total']
+                    results['annulations']    = @parse_annulations(records)
+                    results['offerts']        = @parse_offerts(records)
+                    results['articles']       = @parse_articles(records)
+                    @return_value { status: 0, data: results }
+                catch error
+                    @return_value { status: -1, error: error }
 
         # console.log records
 
@@ -134,13 +134,15 @@ class BDBilleterieRAZ extends Fetcher
     parse_raz_dates: (records) =>
         index = 0
         for record in records
+            # console.log "record4: #{record[4]}, record6: #{record[6]}"
             if record[4] && record[4] != '' && record[6] && record[6] != ''
                 if index == 0
                     date_start = moment(record[4] + ' ' + record[6], 'DD/MMM/YYYY HH:mm:ss')
                 if index == 1
                     date_end = moment(record[4] + ' ' + record[6], 'DD/MMM/YYYY HH:mm:ss')
                     date_short = date_end.format('YYYYMM')
-                if index >= 2
+                # if index >= 2
+                    # console.log 'return', { start: date_start, end: date_end, short: date_short}
                     return { start: date_start, end: date_end, short: date_short}
                 index++
         throw "RAZ dates not found"
