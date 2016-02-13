@@ -110,7 +110,9 @@ class BDBilleterieRAZ extends Fetcher
   # find the first line which contains "RAZ" in col 2 and extract RAZ number
   parse_raz_number: (records) =>
     for record in records
-      if record[1] && record[1].indexOf("RAZ") > -1
+    # commented because some files doesn't contain "RAZ string"
+    #   if record[1] && record[1].indexOf("RAZ") > -1
+      if record[1] && record[1] != ''
         # replace all leading non-digits with nothing
         raz_number = record[1].replace( /^\D+/g, '')
         return parseInt(raz_number)
@@ -135,9 +137,9 @@ class BDBilleterieRAZ extends Fetcher
       if record[4] && record[4] != '' && record[6] && record[6] != ''
         if index == 0
           date_start = moment(record[4] + ' ' + record[6], 'DD/MMM/YYYY HH:mm:ss')
-          date_short = date_end.format('YYYYMM')
         if index == 1
           date_end = moment(record[4] + ' ' + record[6], 'DD/MMM/YYYY HH:mm:ss')
+          date_short = date_end.format('YYYYMM')
         if index >= 2
           return { start: date_start, end: date_end, short: date_short}
         index++
