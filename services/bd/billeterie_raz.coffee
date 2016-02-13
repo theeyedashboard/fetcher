@@ -159,7 +159,7 @@ class BDBilleterieRAZ extends Fetcher
 
     parse_sales_amount: (records) =>
         for record in records
-            if record[1] && record[1].indexOf("VENTES") > -1
+            if record[1] && (record[1].indexOf("VENTES") > -1 || record[1].indexOf("TICKETS") > -1)
                 number = record[4].replace(',','.').replace( /^\D+/g, '')
                 return parseInt(number)
         throw "Sales amount not found"
