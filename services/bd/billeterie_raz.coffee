@@ -46,8 +46,8 @@ class BDBilleterieRAZ extends Fetcher
                         results['taxe1']          = taxes['taxe1']
                         results['taxe2']          = taxes['taxe2']
                         results['total']          = taxes['total']
-                        results['articles']       = @parse_articles(records)
 
+                    results['articles']       = @parse_articles(records)
                     @return_value { status: 0, data: results }
                 catch error
                     @return_value { status: -1, error: error }
@@ -106,7 +106,8 @@ class BDBilleterieRAZ extends Fetcher
                         article = {}
                         article['title']  = record[1]
                         article['amount'] = parseInt(record[4])
-                        article['total']  = parseFloat(record[6])
+                        if record[6] != ''
+                            article['total']  = parseFloat(record[6])
                         articles.push article
         return articles
 
