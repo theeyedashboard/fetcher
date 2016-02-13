@@ -28,6 +28,7 @@ class BDBilleterieRAZ extends Fetcher
         else if @params['action'] == 'parse'
             @parse_worksheet @params['worksheet'], (records) =>
                 results = {}
+                type = @params['file'].substring(7,9)
                 try
                     results['folder']         = @params['folder']
                     results['raz']            = @parse_raz_number(records)
@@ -37,14 +38,16 @@ class BDBilleterieRAZ extends Fetcher
                     results['date_start']     = dates['start']
                     results['date_end']       = dates['end']
                     results['sales_amount']   = @parse_sales_amount(records)
-                    results['revenues']       = @parse_encaissements(records)
-                    taxes = @parse_taxes(records)
-                    results['taxe1']          = taxes['taxe1']
-                    results['taxe2']          = taxes['taxe2']
-                    results['total']          = taxes['total']
                     results['annulations']    = @parse_annulations(records)
                     results['offerts']        = @parse_offerts(records)
-                    results['articles']       = @parse_articles(records)
+                    if type != 'VE'
+                        results['revenues']       = @parse_encaissements(records)
+                        taxes = @parse_taxes(records)
+                        results['taxe1']          = taxes['taxe1']
+                        results['taxe2']          = taxes['taxe2']
+                        results['total']          = taxes['total']
+                        results['articles']       = @parse_articles(records)
+
                     @return_value { status: 0, data: results }
                 catch error
                     @return_value { status: -1, error: error }
