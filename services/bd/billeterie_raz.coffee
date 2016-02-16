@@ -43,14 +43,16 @@ class BDBilleterieRAZ extends Fetcher
                     if type != 'VE'
                         results['revenues']       = @parse_encaissements(records)
                         taxes = @parse_taxes(records)
-                        results['taxe1']          = taxes['taxe1']
-                        results['taxe2']          = taxes['taxe2']
+                        # results['taxe1']          = taxes['taxe1']
+                        # results['taxe2']          = taxes['taxe2']
+                        results['taxes']          = taxes['taxes']
                         results['total']          = taxes['total']
                     else
                         results['revenues']       = 0
-                        results['taxe1']          = { val: 0, ht: 0, tva: 0, ttc: 0 }
-                        results['taxe2']          = { val: 0, ht: 0, tva: 0, ttc: 0 }
+                        # results['taxe1']          = { val: 0, ht: 0, tva: 0, ttc: 0 }
+                        # results['taxe2']          = { val: 0, ht: 0, tva: 0, ttc: 0 }
                         results['total']          = { val: 0, ht: 0, tva: 0, ttc: 0 }
+                        results['taxes']          = []
 
                     results['articles']       = @parse_articles(records)
                     @return_value { status: 0, data: results }
@@ -175,26 +177,35 @@ class BDBilleterieRAZ extends Fetcher
     parse_taxes: (records) =>
         index = 0
         taxes = {}
+        taxes['taxes'] = []
         for record in records
-            if record[1] && (record[1].indexOf("TVA") > -1 || record[1].indexOf("TOTAL") > -1)
+            if record[1] && (record[1].indexOf("TVA") > -1 || record[1].indexOf("TOTAL") > -1) && record[0] == ''
                 value = parseFloat(record[1].replace(',','.').replace( /^\D+/g, ''))
                 ht    = parseFloat(record[4].replace(',','.').replace( /^\D+/g, ''))
                 tva   = parseFloat(record[5].replace(',','.').replace( /^\D+/g, ''))
                 ttc   = parseFloat(record[6].replace(',','.').replace( /^\D+/g, ''))
-                if index == 0
-                    taxes['taxe1'] = { val: value, ht: ht, tva: tva, ttc: ttc }
-                if index == 1
-                    taxes['taxe2'] = { val: value, ht: ht, tva: tva, ttc: ttc }
-                if index == 2
+                if record[1].indexOf("TVA") > -1
+                    taxes['taxes'].push { val: value, ht: ht, tva: tva, ttc: ttc }
+                else if record[1].indexOf("TOTAL") > -1
                     taxes['total'] = { val: value, ht: ht, tva: tva, ttc: ttc }
+
+                # if index == 0
+                #     taxes['taxe1'] = { val: value, ht: ht, tva: tva, ttc: ttc }
+                # if index == 1
+                #     taxes['taxe2'] = { val: value, ht: ht, tva: tva, ttc: ttc }
+                # if index == 2
+                #     taxes['total'] = { val: value, ht: ht, tva: tva, ttc: ttc }
                     # tot_val = taxes['taxe1']['val'] + taxes['taxe2']['val']
                     # tot_ht  = taxes['taxe1']['ht']  + taxes['taxe2']['ht']
                     # tot_tva = taxes['taxe1']['tva'] + taxes['taxe2']['tva']
                     # tot_ttc = taxes['taxe1']['ttc'] + taxes['taxe2']['ttc']
                     # taxes['total'] = { ht: tot_ht, tva: tot_tva, ttc: tot_ttc }
-                    return taxes
-                index++
-        throw "Problem parsing taxes"
+                #     return taxes
+                # index++
+        if taxes['total'] && taxes['taxes'].length > 0
+            return taxes
+        else
+            throw "Problem parsing taxes"
 
     parse_annulations: (records) =>
         for record in records
