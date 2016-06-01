@@ -147,8 +147,9 @@ class BDBilleterieRAZ extends Fetcher
     parse_raz_dates: (records) =>
         index = 0
         for record in records
-            # console.log "record4: #{record[4]}, record6: #{record[6]}"
+            console.log "record4: #{record[4]}, record6: #{record[6]}"
             if record[4] && record[4] != '' && record[6] && record[6] != ''
+                record[6] = @fix_weird_hour(record[6])
                 if index == 0
                     date_start = moment(record[4] + ' ' + record[6], 'DD/MMM/YYYY HH:mm:ss')
                 if index == 1
@@ -159,6 +160,12 @@ class BDBilleterieRAZ extends Fetcher
                     return { start: date_start, end: date_end, short: date_short}
                 index++
         throw "RAZ dates not found"
+
+    fix_weird_hour: (date_str) =>
+        if date_str.length > 9
+            return date_str.split(' ')[1]
+        else
+            return date_str
 
     parse_encaissements: (records) =>
         for record in records
