@@ -54,8 +54,8 @@ class Fetcher
   @print_plugins: =>
     output = ''
     for plugin in @plugins
-      url   = "#{plugin.service}/#{plugin.source}"
-      output +=  "#{url} <br />"
+      _url   = "#{plugin.service}/#{plugin.source}"
+      output +=  "#{_url} <br />"
     return output
 
   @start: (port) =>
