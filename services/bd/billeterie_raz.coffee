@@ -10,10 +10,10 @@ class BDBilleterieRAZ extends Fetcher
         @files_path() + '/' + @params['file']
 
     files_path: =>
-        '/dropbox/' + @params['folder']
+        '/root/Dropbox/' + @params['folder']
 
     folders_path: =>
-        '/dropbox'
+        '/root/Dropbox'
 
     fetch: =>
         if !@params['action']
@@ -66,8 +66,28 @@ class BDBilleterieRAZ extends Fetcher
         # list all services directories
         if fs.readdirSync @files_path()
             for file in fs.readdirSync @files_path()
-                _files.push file if file.indexOf(".xls") > -1
+                # fixed_file = @fix_unicode_error_in_file_names file
+                fixed_file = file # don't rename anymore
+                _files.push fixed_file if fixed_file.indexOf(".xls") > -1
         return _files
+
+    fix_unicode_error_in_file_names: (file) =>
+        if file.indexOf(" (Unicode Encoding Conflict)") != -1
+            fixed_file = file.replace(" (Unicode Encoding Conflict)","")
+            console.log "Renaming filename #{file} -> #{fixed_file}"
+            try
+                fs.renameSync "#{@files_path()}/#{file}", "#{@files_path()}/#{fixed_file}"
+            catch error
+                console.log 'ERROR: ', err
+                return file
+            console.log 'renamed: ', fixed_file
+            console.log 'checking...'
+            for file in fs.readdirSync @files_path()
+                console.log 'file check:', file
+
+            return fixed_file
+        else
+            return file
 
     fetch_folders: =>
         _folders = []
