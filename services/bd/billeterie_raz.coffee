@@ -95,7 +95,14 @@ class BDBilleterieRAZ extends Fetcher
         if fs.readdirSync @folders_path()
             for folder in fs.readdirSync @folders_path()
                 if folder.charAt(0) != '.' && folder != 'test'
-                    _folders.push folder
+                    subfolders = fs.readdirSync @folders_path() + '/' + folder
+                    is_indexable_folder = true
+                    for subfolder in subfolders
+                        if subfolder.indexOf('.') == -1 && subfolder != 'test'
+                            _folders.push folder + '/' + subfolder
+                            is_indexable_folder = false
+                    if is_indexable_folder
+                        _folders.push folder       
         return _folders
 
     worksheets: (callback) =>
