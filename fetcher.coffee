@@ -40,16 +40,19 @@ class Fetcher
     # list all services directories
   	for service in fs.readdirSync './services'
 
-      # console.log "browsing #{service}"
+      console.log "browsing #{service}"
 
       for source in fs.readdirSync "./services/#{service}"
 
-        source_name = source.replace('.coffee', '')
+        # load only if module, not folder
+        if source.indexOf('.coffee') != -1
 
-        NewFetcher = require("./services/#{service}/#{source_name}")
-        fetcher = new NewFetcher(app, service, source_name)
+          source_name = source.replace('.coffee', '')
 
-        @plugins.push fetcher
+          NewFetcher = require("./services/#{service}/#{source_name}")
+          fetcher = new NewFetcher(app, service, source_name)
+
+          @plugins.push fetcher
 
   @print_plugins: =>
     output = ''
