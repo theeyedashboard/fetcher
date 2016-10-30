@@ -1,4 +1,4 @@
-Fetcher         = require('./fetcher')
+Fetcher         = require('./fetcher.coffee')
 
 # app.get '/', (req, res) =>
 #   console.log 'Nothing to display'

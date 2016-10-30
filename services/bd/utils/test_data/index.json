@@ -1,0 +1,72 @@
+{
+	"status": 0,
+	"data": {
+		"folder": "Allure Equip Mag",
+		"raz": 1,
+		"vestiaire": 1,
+		"date_short": "201609",
+		"date_start": "2016-09-12T08:47:47.000Z",
+		"date_end": "2016-09-12T18:13:10.000Z",
+		"sales_amount": 228,
+		"annulations": {
+			"amount": 0,
+			"value": 0
+		},
+		"offerts": {
+			"amount": 0,
+			"value": 0
+		},
+		"revenues": 588,
+		"taxes": [
+			{
+				"val": 20,
+				"ht": 490,
+				"tva": 98,
+				"ttc": 588
+			}
+		],
+		"total": {
+			"val": "total",
+			"ht": 490,
+			"tva": 98,
+			"ttc": 588
+		},
+		"articles": [
+			{
+				"title": "1 VETEMENT",
+				"amount": 21,
+				"total": 42
+			},
+			{
+				"title": "CM VETEMENT",
+				"amount": 8,
+				"total": 0
+			},
+			{
+				"title": "ACCESSOIRE",
+				"amount": 5,
+				"total": 15
+			},
+			{
+				"title": "CASQUE",
+				"amount": 12,
+				"total": 36
+			},
+			{
+				"title": "SAC/ VALISE",
+				"amount": 164,
+				"total": 492
+			},
+			{
+				"title": "PARAPLUIE",
+				"amount": 1,
+				"total": 3
+			},
+			{
+				"title": "CM SAC/ ACC.",
+				"amount": 17,
+				"total": 0
+			}
+		]
+	}
+}
