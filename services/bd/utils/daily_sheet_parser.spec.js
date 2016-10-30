@@ -4,7 +4,7 @@ import moment from 'moment'
 require('coffee-script/register')
 const DailySheetParser = require ('./daily_sheet_parser')
 const daily_data_sheet = require('./test_data/daily_sheet.json')
-const expected_index_results = require('./test_data/index.json')
+const expected_index_results = require('./test_data/parse.json')
 
 describe ('DailySheetParser', () => {
 
