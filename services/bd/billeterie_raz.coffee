@@ -1,5 +1,6 @@
 Fetcher = require('../../fetcher')
 DailySheetParser = require('./utils/daily_sheet_parser')
+HourlySheetParser = require('./utils/hourly_sheet_parser')
 request = require('request')
 fs      = require ('fs')
 excelParser = require('excel-parser')
@@ -32,9 +33,8 @@ class BDBilleterieRAZ extends Fetcher
                 @return_value dailySheetParser.parse(records, @params['folder'], @params['file'])
         else if @params['action'] == 'parse_hourly'
             @parse_worksheet @params['worksheet'], (records) =>
-                # hourlySheetParser = new HourlySheetParser()
-                # @return_value dailySheetParser.parse(records, @params['folder'], @params['file'])
-                @return_value {}
+                hourlySheetParser = new HourlySheetParser()
+                @return_value hourlySheetParser.parse(records, @params['folder'], @params['file'])
 
         # console.log records
 
