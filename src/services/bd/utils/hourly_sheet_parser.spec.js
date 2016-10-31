@@ -1,9 +1,14 @@
 import expect from 'expect'
 import moment from 'moment'
-const ExcelParser = require('./excel_parser')
-
 require('coffee-script/register')
+const ExcelParser = require('./excel_parser')
 const HourlySheetParser = require ('./hourly_sheet_parser')
+
+const worksheet = '12';
+const filename = "VentesHoraire_BV_2016_septembre_LECOZY.xls";
+const folder = "Le Cozy/Test - Horaire - Vestiaire";
+
+let file_path = __dirname + "/test_data/" + filename;
 let results = {}
 let hours   = {}
 
@@ -11,10 +16,6 @@ describe ('HourlySheetParser', () => {
 
   before(function (done) {
     let hourlySheetParser = new HourlySheetParser();
-    let file_path = __dirname + '/test_data/VentesHoraire_BV_2016_septembre_LECOZY.xls';
-    const worksheet = '12';
-    const filename = "VentesHoraire_BV_2016_septembre_LE COZY.xls";
-    const folder = "Le Cozy/Test - Horaire - Vestiaire";
 
     ExcelParser.parse_records_in_file(file_path, worksheet, function(records)
     {
