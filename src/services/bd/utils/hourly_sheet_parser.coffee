@@ -1,7 +1,6 @@
 moment = require('moment')
 DatesFixer = require('./dates_fixer')
 moment_fr = require('./moment.locale.fr.js')
-excelParser = require('excel-parser')
 
 ARTICLES_INDEXES_ROW    = 8
 ARTICLES_LABELS_ROW     = 9
@@ -9,32 +8,17 @@ ARTICLES_UNIT_PRICE_ROW = 10
 
 class HourlySheetParser
 
-  parse: (filepath, worksheet, folder, filename, callback) =>
-    @parse_records_in_file filepath, worksheet, (records) =>
-      results = {}
-      try
-        results['folder'] = folder
-        # moment.locale('fr')
-        results['date']   = @get_date_from_filename(filename, worksheet)
-        # moment.locale('en')
-        results['hours']  = @parse_hours(records)
-        callback({ status: 0, data: results })
-      catch error
-        callback({ status: -1, error: error })
-
-  parse_records_in_file: (filepath, worksheet, callback) =>
-    excelParser.parse(
-      inFile: filepath,
-      worksheet: worksheet,
-      skipEmpty: false,
-    , (err, records) =>
-      if err
-        console.error 'error:', err
-        console.error 'worksheet:', worksheet
-      else
-        # console.log 'records', records
-        callback(records)
-    )
+  parse: (records, worksheet, folder, filename) =>
+    results = {}
+    try
+      results['folder'] = folder
+      # moment.locale('fr')
+      results['date']   = @get_date_from_filename(filename, worksheet)
+      # moment.locale('en')
+      results['hours']  = @parse_hours(records)
+      return { status: 0, data: results }
+    catch error
+      return { status: -1, error: error }
 
   get_date_from_filename: (filename, worksheet) =>
     filename_chunks = filename.split('_')

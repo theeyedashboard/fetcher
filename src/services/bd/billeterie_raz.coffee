@@ -3,7 +3,7 @@ DailySheetParser = require('./utils/daily_sheet_parser')
 HourlySheetParser = require('./utils/hourly_sheet_parser')
 request = require('request')
 fs      = require ('fs')
-excelParser = require('excel-parser')
+ExcelParser = require('./utils/excel_parser')
 moment = require('moment')
 
 class BDBilleterieRAZ extends Fetcher
@@ -25,16 +25,16 @@ class BDBilleterieRAZ extends Fetcher
         else if @params['action'] == 'files'
             @return_value @fetch_files()
         else if @params['action'] == 'worksheets'
-            @worksheets (worksheets) =>
+            ExcelParser.parse_sheet_list_in_file @file(), (worksheets) =>
                 @return_value worksheets
         else if @params['action'] == 'parse'
-            @parse_worksheet @params['worksheet'], (records) =>
+            ExcelParser.parse_records_in_file @file(), @params['worksheet'], (records) =>
                 dailySheetParser = new DailySheetParser()
                 @return_value dailySheetParser.parse(records, @params['folder'], @params['file'])
         else if @params['action'] == 'parse_hourly'
-            hourlySheetParser = new HourlySheetParser()
-            hourlySheetParser.parse @file(), @params['worksheet'], @params['folder'], @params['file'], (records) =>
-                @return_value records
+            ExcelParser.parse_records_in_file @file(), @params['worksheet'], (records) =>
+                hourlySheetParser = new HourlySheetParser()
+                @return_value hourlySheetParser.parse(records, @params['worksheet'], @params['folder'], @params['file'])
             # @return_value hourlySheetParser.parse(records, @params['folder'], @params['file'])
             # @parse_worksheet @params['worksheet'], (records) =>
             #     hourlySheetParser = new HourlySheetParser()
@@ -66,29 +66,5 @@ class BDBilleterieRAZ extends Fetcher
                     if is_indexable_folder
                         _folders.push folder
         return _folders
-
-    worksheets: (callback) =>
-        console.log @file()
-        excelParser.worksheets(
-            inFile: @file()
-        , (err, worksheets) =>
-            if err
-                console.error 'error:', err
-            else
-                callback(worksheets)
-        )
-
-    parse_worksheet: (worksheet, callback) =>
-        excelParser.parse(
-            inFile: @file(),
-            worksheet: worksheet,
-            skipEmpty: false,
-        , (err, records) =>
-            if err
-                console.error 'error:', err
-                console.error 'worksheet:', worksheet
-            else
-                callback(records)
-        )
 
 module.exports = BDBilleterieRAZ

@@ -1,10 +1,9 @@
 import expect from 'expect'
 import moment from 'moment'
+const ExcelParser = require('./excel_parser')
 
 require('coffee-script/register')
 const HourlySheetParser = require ('./hourly_sheet_parser')
-const hourly_data_sheet = require('./test_data/hourly_sheet.json')
-// const expected_index_results = require('./test_data/index.json')
 let results = {}
 let hours   = {}
 
@@ -12,9 +11,14 @@ describe ('HourlySheetParser', () => {
 
   before(function (done) {
     let hourlySheetParser = new HourlySheetParser();
-    let file_path = __dirname + '/test_data/VentesHoraire_BV_2016_septembre_LECOZY.xls'
-    hourlySheetParser.parse(file_path, '12', "Le Cozy/Test - Horaire - Vestiaire", "VentesHoraire_BV_2016_septembre_LE COZY.xls", function(records) {
-      results = records;
+    let file_path = __dirname + '/test_data/VentesHoraire_BV_2016_septembre_LECOZY.xls';
+    const worksheet = '12';
+    const filename = "VentesHoraire_BV_2016_septembre_LE COZY.xls";
+    const folder = "Le Cozy/Test - Horaire - Vestiaire";
+
+    ExcelParser.parse_records_in_file(file_path, worksheet, function(records)
+    {
+      results = hourlySheetParser.parse(records, worksheet, folder, filename);
       // console.log('results', results);
       results['data']['date'] = results['data']['date'].replace('+00:00','.000Z');
       hours = results['data']['hours'];
