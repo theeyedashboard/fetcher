@@ -12,8 +12,8 @@ class DailySheetParser
       results['vestiaire']      = @parse_vestiaire(records)
       dates = @parse_raz_dates(records)
       results['date_short']     = dates['short']
-      results['date_start']     = dates['start']
-      results['date_end']       = dates['end']
+      results['date_start']     = dates['start'].format()
+      results['date_end']       = dates['end'].format()
       results['sales_amount']   = @parse_sales_amount(records)
       results['annulations']    = @parse_annulations(records)
       results['offerts']        = @parse_offerts(records)

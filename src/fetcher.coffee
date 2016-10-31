@@ -38,11 +38,11 @@ class Fetcher
   @load_plugins: =>
 
     # list all services directories
-  	for service in fs.readdirSync './services'
+  	for service in fs.readdirSync __dirname+'/services'
 
       console.log "browsing #{service}"
 
-      for source in fs.readdirSync "./services/#{service}"
+      for source in fs.readdirSync __dirname+"/services/#{service}"
 
         # load only if module, not folder
         if source.indexOf('.coffee') != -1

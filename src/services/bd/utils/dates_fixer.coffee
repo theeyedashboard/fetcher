@@ -11,6 +11,7 @@ class DatesFixer
     if date_str.length >= 10
       return date_str
     else
+      moment.locale('en')
       new_date = moment(date_str, 'DD-MMM-YY')
       return new_date.format('DD/MM/YYYY')
 

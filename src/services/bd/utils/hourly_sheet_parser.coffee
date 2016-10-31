@@ -14,7 +14,9 @@ class HourlySheetParser
       results = {}
       try
         results['folder'] = folder
-        results['date']   = @get_date_from_filename(filename)
+        # moment.locale('fr')
+        results['date']   = @get_date_from_filename(filename, worksheet)
+        # moment.locale('en')
         results['hours']  = @parse_hours(records)
         callback({ status: 0, data: results })
       catch error
@@ -34,12 +36,11 @@ class HourlySheetParser
         callback(records)
     )
 
-  get_date_from_filename: (filename) =>
+  get_date_from_filename: (filename, worksheet) =>
     filename_chunks = filename.split('_')
     year = filename_chunks[2]
     month = filename_chunks[3]
-    moment.locale('fr')
-    return moment("#{month} #{year}", "MMMM YYYY")
+    return moment("#{worksheet} #{month} #{year}", "DD MMMM YYYY").format()
 
   parse_hours: (records) =>
     hours = {}

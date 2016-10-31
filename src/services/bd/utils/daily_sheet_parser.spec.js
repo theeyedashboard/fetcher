@@ -6,19 +6,23 @@ const DailySheetParser = require ('./daily_sheet_parser')
 const daily_data_sheet = require('./test_data/daily_sheet.json')
 const expected_index_results = require('./test_data/parse.json')
 
+let index_results = {}
+
+before( function() {
+  const dailySheetParser = new DailySheetParser()
+  index_results = dailySheetParser.parse(daily_data_sheet, "Allure Equip Mag", "Export_BV_2016_septembre_Allure Hôtesses.xls")
+
+  // fix date for JSON.stringify
+  index_results['data']['date_start'] = index_results['data']['date_start'].replace('+00:00','.000Z')
+  index_results['data']['date_end'] = index_results['data']['date_end'].replace('+00:00','.000Z')
+})
+
 describe ('DailySheetParser', () => {
 
   describe('global parse function', () =>
   {
     it('should return expected result json', () =>
     {
-      const dailySheetParser = new DailySheetParser()
-      let index_results = dailySheetParser.parse(daily_data_sheet, "Allure Equip Mag", "Export_BV_2016_septembre_Allure Hôtesses.xls")
-
-      // fix date for JSON.stringify
-      index_results['data']['date_start'] = moment(index_results['data']['date_start']).format().replace('+02:00','.000Z')
-      index_results['data']['date_end'] = moment(index_results['data']['date_end']).format().replace('+02:00','.000Z')
-
       expect(
         JSON.stringify(index_results)
       ).toEqual(JSON.stringify(expected_index_results))
@@ -30,10 +34,11 @@ describe ('DailySheetParser', () => {
 
     const dailySheetParser = new DailySheetParser()
     let index_results = dailySheetParser.parse(daily_data_sheet, "Allure Equip Mag", "Export_BV_2016_septembre_Allure Hôtesses.xls")
+    // console.log('index_results', index_results)
 
-    // fix date for JSON.stringify
-    index_results['data']['date_start'] = moment(index_results['data']['date_start']).format().replace('+02:00','.000Z')
-    index_results['data']['date_end'] = moment(index_results['data']['date_end']).format().replace('+02:00','.000Z')
+    // // fix date for JSON.stringify
+    index_results['data']['date_start'] = index_results['data']['date_start'].replace('+00:00','.000Z')
+    index_results['data']['date_end'] = index_results['data']['date_end'].replace('+00:00','.000Z')
 
     describe('parse folder', () => {
       it('should return expected value', () => {
