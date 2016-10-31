@@ -32,9 +32,13 @@ class BDBilleterieRAZ extends Fetcher
                 dailySheetParser = new DailySheetParser()
                 @return_value dailySheetParser.parse(records, @params['folder'], @params['file'])
         else if @params['action'] == 'parse_hourly'
-            @parse_worksheet @params['worksheet'], (records) =>
-                hourlySheetParser = new HourlySheetParser()
-                @return_value hourlySheetParser.parse(records, @params['folder'], @params['file'])
+            hourlySheetParser = new HourlySheetParser()
+            hourlySheetParser.parse @file(), @params['worksheet'], @params['folder'], @params['file'], (records) =>
+                @return_value records
+            # @return_value hourlySheetParser.parse(records, @params['folder'], @params['file'])
+            # @parse_worksheet @params['worksheet'], (records) =>
+            #     hourlySheetParser = new HourlySheetParser()
+            #     @return_value hourlySheetParser.parse(records, @params['folder'], @params['file'])
 
         # console.log records
 
