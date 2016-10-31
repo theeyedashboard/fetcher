@@ -29,6 +29,11 @@ describe ('HourlySheetParser', () => {
         hours['9']['total']
       ).toEqual(123)
     })
+    it('should return 1543 for total', () => {
+      expect(
+        hours['total']['total']
+      ).toEqual(1543)
+    })
   })
 
   describe('revenues', () => {
@@ -42,21 +47,12 @@ describe ('HourlySheetParser', () => {
         hours['6']['revenues']
       ).toEqual(0)
     })
-  })
-
-  describe('revenues', () => {
-    it('should return 276 for hour 9', () => {
+    it('should return 3426 for total', () => {
       expect(
-        hours['9']['revenues']
-      ).toEqual(276)
-    })
-    it('should return 0 for hour 20', () => {
-      expect(
-        hours['20']['revenues']
-      ).toEqual(0)
+        hours['total']['revenues']
+      ).toEqual(3426)
     })
   })
-
 
   describe('annulations', () => {
     it('should return 0 for hour 9', () => {
@@ -67,6 +63,11 @@ describe ('HourlySheetParser', () => {
     it('should return 7 for hour 18', () => {
       expect(
         hours['18']['annulations']
+      ).toEqual(7)
+    })
+    it('should return 7 for total', () => {
+      expect(
+        hours['total']['annulations']
       ).toEqual(7)
     })
   })
@@ -82,50 +83,121 @@ describe ('HourlySheetParser', () => {
         hours['10']['offerts']
       ).toEqual(0)
     })
+    it('should return 11 for total', () => {
+      expect(
+        hours['total']['offerts']
+      ).toEqual(11)
+    })
   })
 
   describe('articles', () => {
-    it('should return expected {} for hour 9', () => {
+    it('should return expected [] for hour 0', () => {
+      let expected_articles = []
+      expect(
+        hours['0']['articles']
+      ).toEqual(expected_articles)
+    });
+
+    it('should return expected [...] for hour 9', () => {
       let expected_articles = [
         {
           title: "1 VETEMENT",
           unit_price: 2,
+          amount: 45,
+          total: 90 // not in the sheet, calcutated
         },
         {
           title: "2 VETEMENTS",
-          unit_price: 4
+          unit_price: 4,
+          amount: 5,
+          total: 20
         },
         {
           title: "1 PETIT SAC",
-          unit_price: 2
+          unit_price: 2,
+          amount: 60,
+          total: 120
         },
         {
           title: "1 GROS SAC",
-          unit_price: 4
+          unit_price: 4,
+          amount: 10,
+          total: 40
         },
         {
           title: "1 CASQUE",
-          unit_price: 2
+          unit_price: 2,
+          amount: 3,
+          total: 6
+        }
+        // {
+        //   title: "CIGARETTE",
+        //   unit_price: 10,
+        //   amount: 0
+        // },
+        // {
+        //   title: "CAFE",
+        //   unit_price: 2,
+        //   amount: 0
+        // },
+      ]
+      expect(
+        hours['9']['articles']
+      ).toEqual(expected_articles)
+    })
+
+    it('should return expected [...] for total', () => {
+      let expected_articles = [
+        {
+          title: "1 VETEMENT",
+          unit_price: 2,
+          amount: 521,
+          total: 1042 // not in the sheet, calcutated
+        },
+        {
+          title: "2 VETEMENTS",
+          unit_price: 4,
+          amount: 47,
+          total: 188
+        },
+        {
+          title: "1 PETIT SAC",
+          unit_price: 2,
+          amount: 815,
+          total: 1630
+        },
+        {
+          title: "1 GROS SAC",
+          unit_price: 4,
+          amount: 107,
+          total: 428
+        },
+        {
+          title: "1 CASQUE",
+          unit_price: 2,
+          amount: 49,
+          total: 98
         },
         {
           title: "CIGARETTE",
-          unit_price: 10
+          unit_price: 10,
+          amount: 4,
+          total: 40
         },
         {
           title: "CAFE",
-          unit_price: 2
+          unit_price: 2,
+          amount: 0,
+          total: 0
         },
       ]
       expect(
-        hours['10']['articles']
+        hours['total']['articles']
       ).toEqual(expected_articles)
     })
-    it('should return 0 for hour 10', () => {
-      expect(
-        hours['10']['offerts']
-      ).toEqual(0)
-    })
-  })
+
+
+  }) // desc articles
 
 
 })

@@ -27,6 +27,8 @@ class HourlySheetParser
         if record[0] and record[0].indexOf('TOTAL') == -1
           hours[hour_index.toString()] = @parse_hour(records, index)
           hour_index++
+        else if record[0] and record[0].indexOf('TOTAL') != -1
+          hours['total'] =  @parse_hour(records, index)
     return hours
 
   parse_hour: (records, index) =>
@@ -55,10 +57,12 @@ class HourlySheetParser
       article_index = records[ARTICLES_INDEXES_ROW][column_index]
       article_name = records[ARTICLES_LABELS_ROW][column_index]
       unit_price = @parse_int(records[ARTICLES_UNIT_PRICE_ROW][column_index])
-      if article_index && article_name
+      if article_index && article_name && column
         articles.push {
           title: article_name,
-          unit_price: unit_price
+          unit_price: unit_price,
+          amount: @parse_int(column),
+          total: @parse_int(column) * unit_price
         }
     return articles
 
