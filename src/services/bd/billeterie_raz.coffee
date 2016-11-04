@@ -27,6 +27,9 @@ class BDBilleterieRAZ extends Fetcher
         else if @params['action'] == 'worksheets'
             ExcelParser.parse_sheet_list_in_file @file(), (worksheets) =>
                 @return_value worksheets
+        else if @params['action'] == 'last_modified'
+            fs.stat @file(), (err, stat) =>
+                @return_value stat.mtime
         else if @params['action'] == 'parse'
             ExcelParser.parse_records_in_file @file(), @params['worksheet'], (records) =>
                 dailySheetParser = new DailySheetParser()
