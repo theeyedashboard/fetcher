@@ -35,7 +35,7 @@
   },
   "scripts": {
     "start": "nodemon src/main.coffee localhost 80",
-    "test": "mocha --compilers js:babel-core/register src/services/**/*.spec.js",
+    "test": "mocha --compilers js:babel-core/register src/services/**/*.spec.js --timeout 5000",
     "test:watch": "npm test -- --watch"
   },
   "repository": {
